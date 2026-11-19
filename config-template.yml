@@ -2,8 +2,14 @@
 # Copied to .specify/extensions/ai-dlc-compliance/compliance-config.yml on install
 
 # Path to the ai-dlc-harness checkout, relative to this project's root (or absolute).
-# This is the ONE thing every project using the harness must set correctly.
+# If nothing exists at this path yet, it is auto-cloned from harness_repo_url the
+# first time a compliance check runs — you don't need to clone it by hand.
 harness_path: "../ai-dlc-harness"
+
+# Where to auto-fetch harness_path from if it doesn't exist yet. Only change this to
+# point at a fork, mirror, or private checkout; the public default works for most
+# projects.
+harness_repo_url: "https://github.com/CT-AI-Tech/ai-dlc-harness.git"
 
 # Which vertical under <harness_path>/verticals/ applies to this project.
 # Must match a folder name, e.g. "medical-devices".
