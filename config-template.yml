@@ -1,0 +1,26 @@
+# AI-DLC Compliance Guardrail Harness - project configuration
+# Copied to .specify/extensions/ai-dlc-compliance/compliance-config.yml on install
+
+# Path to the ai-dlc-harness checkout, relative to this project's root (or absolute).
+# This is the ONE thing every project using the harness must set correctly.
+harness_path: "../ai-dlc-harness"
+
+# Which vertical under <harness_path>/verticals/ applies to this project.
+# Must match a folder name, e.g. "medical-devices".
+vertical: "medical-devices"
+
+# If true, a missing/unresolved BINDING guardrail stops the Spec Kit command
+# (constitution/plan/tasks/implement) and asks the user to resolve it.
+# If false, binding guardrails are surfaced but never block.
+block_on_binding: true
+
+# Run the compliance check at these hook points. Set an entry to false to skip
+# that phase without uninstalling the extension.
+enabled_phases:
+  constitution: true
+  development: true
+  review: true
+
+# Where evidence (which guardrails were loaded/applied, and when) is recorded
+# for each feature, relative to this project's root.
+evidence_dir: ".specify/compliance"

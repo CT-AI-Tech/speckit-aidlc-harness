@@ -1,0 +1,58 @@
+schema_version: "1.0"
+
+extension:
+  id: ai-dlc-compliance
+  name: "AI-DLC Healthcare Compliance Guardrails"
+  version: "0.1.0"
+  description: "Loads vertical-specific US healthcare compliance guardrails (HIPAA, FDA, IEC 62304, ISO 14971, etc.) from the AI-DLC compliance harness at the right point in the Spec Kit lifecycle, using an indexed lookup so only relevant guardrails ever enter context."
+  category: "governance"
+  effect: "read-write"
+  author: "ai-dlc-harness"
+  license: "internal"
+
+requires:
+  speckit_version: ">=0.9.0"
+
+provides:
+  commands:
+    - name: speckit.ai-dlc-compliance.check
+      file: commands/speckit.ai-dlc-compliance.check.md
+      description: "Query the AI-DLC compliance harness for guardrails matching this project's vertical and the current lifecycle phase, and surface binding/advisory findings"
+
+  config:
+    - name: "compliance-config.yml"
+      template: "config-template.yml"
+      description: "Harness location, project vertical, and which phases are checked"
+      required: true
+
+hooks:
+  before_constitution:
+    command: speckit.ai-dlc-compliance.check
+    optional: false
+    description: "Surface constitution-phase guardrails (e.g. SaMD classification, premarket cybersecurity) before the project constitution is drafted"
+  after_plan:
+    command: speckit.ai-dlc-compliance.check
+    optional: false
+    description: "Check development-phase guardrails (software lifecycle class, risk management) against the implementation plan"
+  after_tasks:
+    command: speckit.ai-dlc-compliance.check
+    optional: false
+    description: "Check development-phase guardrails against the generated task list"
+  after_implement:
+    command: speckit.ai-dlc-compliance.check
+    optional: false
+    description: "Check review-phase guardrails (design-control traceability) after implementation"
+
+tags:
+  - "compliance"
+  - "healthcare"
+  - "guardrails"
+  - "governance"
+  - "hipaa"
+  - "fda"
+
+config:
+  defaults:
+    harness_path: "../ai-dlc-harness"
+    vertical: "medical-devices"
+    block_on_binding: true
